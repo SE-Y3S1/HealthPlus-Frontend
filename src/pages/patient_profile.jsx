@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import Footer from "../components/Footer";
 import jsPDF from "jspdf"; // Importing jsPDF for PDF generation
 import { useNavigate } from "react-router-dom";
+import user from "../assets/user.jpg";
 
 const PatientProfile = () => {
   const { id } = useParams();
@@ -107,125 +108,162 @@ Policy Number: ${patient.policyno}
 Medical Information: ${patient.medicalinfos.split(", ").join(", ")}`;
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg p-7 max-w-lg w-full">
-        <h2 className="text-4xl font-bold text-center mb-7">Patient Profile</h2>
+    <div>
+      <h2 className="text-3xl font-bold text-center mt-5 ">
+  {isEditing ? "Edit Patient Profile" : "Patient Profile"}
+</h2>
 
-        {error && <div className="text-red-600 text-center mb-4">{error}</div>}
-        {successMessage && <div aria-live="polite" className="text-green-600 text-center mb-4">{successMessage}</div>}
+      <div className="flex items-center justify-center min-h-screen bg-white">
 
-        {/* Patient details section */}
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold">Personal Information</h3>
-          <div className="flex flex-col mb-4">
-            <label className="font-medium">Name:</label>
-            {isEditing ? (
-              <input type="text" name="name" value={editedPatient.name} onChange={handleEditChange} className="border rounded px-2 py-1" />
-            ) : (
-              <p>{patient.name}</p>
-            )}
+        <div className="bg-white rounded-lg p-7 max-w-lg w-full">
+
+
+          {error && <div className="text-red-600 text-center mb-4">{error}</div>}
+          {successMessage && <div aria-live="polite" className="text-green-600 text-center mb-4">{successMessage}</div>}
+
+          {/* Patient details section */}
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold">Personal Information</h3>
+            <div className="flex flex-col mb-4">
+              <label className="font-medium">Name:</label>
+              {isEditing ? (
+                <input type="text" name="name" value={editedPatient.name} onChange={handleEditChange} className="border rounded px-2 py-1" />
+              ) : (
+                <p>{patient.name}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col mb-4">
+              <label className="font-medium">NIC:</label>
+              {isEditing ? (
+                <input type="text" name="nic" value={editedPatient.nic} onChange={handleEditChange} className="border rounded px-2 py-1" />
+              ) : (
+                <p>{patient.nic}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col mb-4">
+              <label className="font-medium">Address:</label>
+              {isEditing ? (
+                <input type="text" name="address" value={editedPatient.address} onChange={handleEditChange} className="border rounded px-2 py-1" />
+              ) : (
+                <p>{patient.address}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col mb-4">
+              <label className="font-medium">Date of Birth:</label>
+              <p>{new Date(patient.dob).toLocaleDateString()}</p>
+            </div>
+
+            <div className="flex flex-col mb-4">
+              <label className="font-medium">Contact Number:</label>
+              {isEditing ? (
+                <input type="text" name="contactno" value={editedPatient.contactno} onChange={handleEditChange} className="border rounded px-2 py-1" />
+              ) : (
+                <p>{patient.contactno}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col mb-4">
+              <label className="font-medium">Email Address:</label>
+              <p>{patient.email}</p>
+            </div>
+
+            <div className="flex flex-col mb-4">
+              <label className="font-medium">Insurance Provider:</label>
+              {isEditing ? (
+                <input type="text" name="insuranceprovider" value={editedPatient.insuranceprovider} onChange={handleEditChange} className="border rounded px-2 py-1" />
+              ) : (
+                <p>{patient.insuranceprovider}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col mb-4">
+              <label className="font-medium">Policy Number:</label>
+              {isEditing ? (
+                <input type="text" name="policyno" value={editedPatient.policyno} onChange={handleEditChange} className="border rounded px-2 py-1" />
+              ) : (
+                <p>{patient.policyno}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col mb-4">
+              <label className="font-medium">Medical Information:</label>
+              {isEditing ? (
+                <input type="text" name="medicalinfos" value={editedPatient.medicalinfos} onChange={handleEditChange} className="border rounded px-2 py-1" />
+              ) : (
+                <ul className="list-disc ml-5">
+                  {patient.medicalinfos.split(", ").map((info, index) => (
+                    <li key={index}>{info}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+
           </div>
 
-          <div className="flex flex-col mb-4">
-            <label className="font-medium">NIC:</label>
-            {isEditing ? (
-              <input type="text" name="nic" value={editedPatient.nic} onChange={handleEditChange} className="border rounded px-2 py-1" />
-            ) : (
-              <p>{patient.nic}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col mb-4">
-            <label className="font-medium">Address:</label>
-            {isEditing ? (
-              <input type="text" name="address" value={editedPatient.address} onChange={handleEditChange} className="border rounded px-2 py-1" />
-            ) : (
-              <p>{patient.address}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col mb-4">
-            <label className="font-medium">Date of Birth:</label>
-            <p>{new Date(patient.dob).toLocaleDateString()}</p>
-          </div>
-
-          <div className="flex flex-col mb-4">
-            <label className="font-medium">Contact Number:</label>
-            {isEditing ? (
-              <input type="text" name="contactno" value={editedPatient.contactno} onChange={handleEditChange} className="border rounded px-2 py-1" />
-            ) : (
-              <p>{patient.contactno}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col mb-4">
-            <label className="font-medium">Email Address:</label>
-            <p>{patient.email}</p>
-          </div>
-
-          <div className="flex flex-col mb-4">
-            <label className="font-medium">Insurance Provider:</label>
-            {isEditing ? (
-              <input type="text" name="insuranceprovider" value={editedPatient.insuranceprovider} onChange={handleEditChange} className="border rounded px-2 py-1" />
-            ) : (
-              <p>{patient.insuranceprovider}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col mb-4">
-            <label className="font-medium">Policy Number:</label>
-            {isEditing ? (
-              <input type="text" name="policyno" value={editedPatient.policyno} onChange={handleEditChange} className="border rounded px-2 py-1" />
-            ) : (
-              <p>{patient.policyno}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col mb-4">
-            <label className="font-medium">Medical Information:</label>
-            {isEditing ? (
-              <input type="text" name="medicalinfos" value={editedPatient.medicalinfos} onChange={handleEditChange} className="border rounded px-2 py-1" />
-            ) : (
-              <ul className="list-disc ml-5">
-                {patient.medicalinfos.split(", ").map((info, index) => (
-                  <li key={index}>{info}</li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          {/* Edit button */}
+        </div>
+        <div className="bg-white rounded-lg p-7 max-w-lg w-full">
           <div className="flex justify-center mb-4">
-            {isEditing ? (
-              <button onClick={saveEditedDetails} className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Save</button>
-            ) : (
-              <button onClick={() => setIsEditing(true)} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Edit</button>
-            )}
+            <img src={user} className="h-[200px]" />
           </div>
-
           {/* QR code */}
+
           <div className="flex flex-col items-center mb-4">
             <label className="font-medium">QR Code:</label>
             <QRCodeSVG value={qrData} size={128} />
           </div>
 
-          {/* PDF generation button */}
-          <div className="flex justify-center mb-4">
-            <button onClick={generatePDF} className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">Download PDF</button>
+          <div className="bg-white shadow-lg rounded-lg p-5 max-w-sm mx-auto mb-6">
+          <h3 className="text-xl font-semibold text-center mb-4">Appointments</h3>
+
+          <div className="border-b border-gray-200 pb-4 mb-4">
+            <h4 className="text-lg font-medium">Upcoming Appointment</h4>
+            <p><span className="font-medium">Date: 2024.11.16</span> </p>
+            <p><span className="font-medium">Time: 9 AM</span> </p>
+            <p><span className="font-medium">Doctor: Dr. Mike Angelo</span></p>
+            <p><span className="font-medium">Specialization: Cardiologistc</span></p>
           </div>
 
-          {/* Email button */}
-          <div className="flex justify-center mb-4">
-            <button onClick={handleEmail} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Email Patient Details</button>
-          </div>
-
-          {/* Delete button */}
+          {/* Show All Appointments Button */}
           <div className="flex justify-center">
-            <button onClick={() => handleDelete(patient._id)} className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Delete Patient</button>
+            <button
+              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            >
+              Show All Appointments
+            </button>
           </div>
         </div>
+        </div>
 
-        <Footer />
+        
+
+      </div>
+      {/* Edit button */}
+      <div className="flex justify-center mb-4">
+        {isEditing ? (
+          <button onClick={saveEditedDetails} className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Save</button>
+        ) : (
+          <button onClick={() => setIsEditing(true)} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Edit</button>
+        )}
+      </div>
+      <div className="flex items-center justify-center mx-3">
+        {/* PDF generation button */}
+        <div className="flex justify-center mb-4 mx-3">
+          <button onClick={generatePDF} className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">Download PDF</button>
+        </div>
+
+        {/* Email button */}
+        <div className="flex justify-center mb-4 mx-3">
+          <button onClick={handleEmail} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Email Patient Details</button>
+        </div>
+
+        {/* Delete button */}
+        <div className="flex justify-center mb-4">
+          <button onClick={() => handleDelete(patient._id)} className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Delete Patient</button>
+        </div>
       </div>
     </div>
   );

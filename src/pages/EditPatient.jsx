@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import Header from "../components/header";
-import Footer from "../components/Footer"; 
-
 
 const EditPatient = () => {
   const { patientId } = useParams(); 
@@ -16,11 +13,11 @@ const EditPatient = () => {
     insuranceprovider: "",
     policyno: "",
     medicalinfos: "",
+    nic: "", // Add NIC to the patient state
   });
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
-
 
   useEffect(() => {
     const fetchPatientDetails = async () => {
@@ -45,8 +42,8 @@ const EditPatient = () => {
   };
 
   const validateForm = () => {
-    const { name, address, dob, contactno, email, insuranceprovider, policyno, medicalinfos } = patient;
-    if (!name || !address || !dob || !contactno || !email || !insuranceprovider || !policyno || !medicalinfos) {
+    const { name, address, dob, contactno, email, insuranceprovider, policyno, medicalinfos, nic } = patient;
+    if (!name || !address || !dob || !contactno || !email || !insuranceprovider || !policyno || !medicalinfos || !nic) {
       return "All fields are required.";
     }
     return null;
@@ -75,7 +72,6 @@ const EditPatient = () => {
 
   return (
     <div>
-      <Header /> 
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-green-100">
         <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
           <h2 className="text-3xl font-bold text-center mb-6">Edit Patient Details</h2>
@@ -90,9 +86,10 @@ const EditPatient = () => {
               { label: "Date of Birth", name: "dob", type: "date", required: true },
               { label: "Contact Number", name: "contactno", type: "text", required: true },
               { label: "Email Address", name: "email", type: "email", required: true },
-              { label: "Insurance Provider", name: "insuranceprovider", type: "text", required: true },
-              { label: "Policy Number", name: "policyno", type: "text", required: true },
+              { label: "Insurance Provider", name: "insuranceprovider", type: "text", required: false },
+              { label: "Policy Number", name: "policyno", type: "text", required: false },
               { label: "Medical Information", name: "medicalinfos", type: "textarea", required: false },
+              { label: "NIC", name: "nic", type: "text", required: true }, // Add NIC field here
             ].map((field) => (
               <div key={field.name} className="mb-4">
                 <label className="block mb-2 font-semibold">{field.label}:</label>
@@ -126,7 +123,6 @@ const EditPatient = () => {
           </form>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

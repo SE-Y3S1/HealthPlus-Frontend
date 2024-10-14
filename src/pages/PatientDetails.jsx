@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; 
 import { QRCodeSVG } from "qrcode.react"; 
 import { jsPDF } from "jspdf";
-import Header from "../components/header";
-import Footer from "../components/Footer"; 
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import Footer from "../components/Footer";
 
 const PatientDetails = () => {
   const [patients, setPatients] = useState([]);
@@ -61,15 +61,9 @@ const PatientDetails = () => {
 
   // Handle QR code generation
   const handleQrCode = (patient) => {
-    const details = `Name: ${patient.name}
-Address: ${patient.address}
-Date of Birth: ${new Date(patient.dob).toLocaleDateString()}
-Contact Number: ${patient.contactno}
-Email Address: ${patient.email}
-Insurance Provider: ${patient.insuranceprovider}
-Policy Number: ${patient.policyno}
-Medical Information: ${patient.medicalinfos.split(", ").join(", ")}`;
-    setQrData(details);
+    // Create a URL that points to the patient's details page
+    const patientProfileUrl = `http://localhost:3000/patient-profile/${patient._id}`;
+    setQrData(patientProfileUrl); // Set the QR code data to the URL
   };
 
   // Handle loading and error states
@@ -79,11 +73,16 @@ Medical Information: ${patient.medicalinfos.split(", ").join(", ")}`;
 
   return (
     <div className="flex flex-col p-4 md:p-8 bg-gray-50 min-h-screen">
-      <Header />
       <h2 className="text-2xl font-bold mb-4">Patient Details</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {patients.map((patient) => (
           <div key={patient._id} className="bg-white shadow-lg p-6 rounded-lg">
+            <div className="flex justify-center mb-4">
+              <Link to={`/patient-profile/${patient._id}`} className="bg-teal-700 text-white py-1 px-3 rounded hover:bg-teal-600">
+                <FontAwesomeIcon icon={faUser} className="mr-2" />
+                View Patient Profile
+              </Link>
+            </div>
             <h3 className="text-lg font-semibold">Name: {patient.name}</h3>
             <p className="mt-2"><strong>Address:</strong> {patient.address}</p>
             <p className="mt-1"><strong>Date of Birth:</strong> {new Date(patient.dob).toLocaleDateString()}</p>
@@ -100,10 +99,10 @@ Medical Information: ${patient.medicalinfos.split(", ").join(", ")}`;
               </ul>
             </div>
             <div className="flex space-x-4 mt-4">
-              <Link to={`/edit/${patient._id}`} className="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600">
+              <Link to={`/edit/${patient._id}`} className="bg-blue-300 text-white py-1 px-3 rounded hover:bg-teal-600">
                 Edit Details
               </Link>
-              <button onClick={() => downloadDetails(patient)} className="bg-teal-500 text-white py-1 px-3 rounded hover:bg-teal-600">
+              <button onClick={() => downloadDetails(patient)} className="bg-teal-500 text-white py-2 px-3 rounded hover:bg-teal-600">
                 Download Details
               </button>
               <button onClick={() => handleQrCode(patient)} className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
@@ -123,7 +122,7 @@ Medical Information: ${patient.medicalinfos.split(", ").join(", ")}`;
           <div className="flex justify-center mt-2">
             <QRCodeSVG value={qrData} size={128} />
           </div>
-          <p className="text-center mt-2 text-gray-500">Scan the QR code for patient details</p>
+          <p className="text-center mt-2 text-gray-500">Scan the QR code to view patient details</p>
         </div>
       )}
 

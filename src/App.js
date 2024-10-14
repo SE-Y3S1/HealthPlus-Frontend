@@ -9,11 +9,13 @@ import Footer from "./components/Footer";
 import Dashboard from "./pages/Dashboard";
 import PatientManagement from "./pages/patient_management";
 import './index.css'; // Adjust the path as necessary
+import { PatientProvider } from "./context/patientContext";
 
 function App() {
   const [currentPatientId, setCurrentPatientId] = useState(null); // Manage current patient ID
 
   return (
+    <PatientProvider>
     <Router>
       <div>
         <Header  /> 
@@ -30,6 +32,7 @@ function App() {
       </div>
       
     </Router>
+    </PatientProvider>
   );
 }
 
